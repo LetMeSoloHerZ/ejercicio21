@@ -4,6 +4,7 @@
 <html>
 <head><title>Listado de Aplicaciones</title></head>
 <body>
+    <p>Sesión: ${sessionScope.usuario.nombre} (${sessionScope.rol}) | <a href="${pageContext.request.contextPath}/logout">Cerrar sesión</a></p>
 <h2>Listado de Aplicaciones</h2>
 <p><a href="aplicaciones?accion=nuevo">+ Nueva Aplicacion</a></p>
 <table border="1" cellpadding="5" cellspacing="0">

@@ -2,6 +2,7 @@ package co.unicartagena.aplicacion.controlador;
 
 import co.unicartagena.aplicacion.dao.UsuarioDAO;
 import co.unicartagena.aplicacion.modelo.Usuario;
+import co.unicartagena.aplicacion.util.PasswordUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -49,17 +50,24 @@ public class UsuarioServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String idParam = request.getParameter("id");
+        String claveIngresada = request.getParameter("clave");
 
         Usuario u = new Usuario();
         u.setNombre(request.getParameter("nombre"));
-        u.setClave(request.getParameter("clave"));
         u.setCorreo(request.getParameter("correo"));
         u.setRol(request.getParameter("rol"));
 
         if (idParam == null || idParam.isEmpty()) {
+            u.setClave(PasswordUtil.hashear(claveIngresada));
             dao.insertar(u);
         } else {
             u.setId(Integer.parseInt(idParam));
+            if (claveIngresada != null && !claveIngresada.isEmpty()) {
+                u.setClave(PasswordUtil.hashear(claveIngresada));
+            } else {
+                Usuario existente = dao.buscarPorId(u.getId());
+                u.setClave(existente.getClave());
+            }
             dao.actualizar(u);
         }
         response.sendRedirect("usuarios");

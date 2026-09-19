@@ -81,6 +81,39 @@ public class AplicacionDAO {
         }
     }
 
+    public List<Aplicacion> filtrarPorCategoriaYPrecio(String categoria, double precioMin, double precioMax) {
+        List<Aplicacion> lista = new ArrayList<>();
+        String sql = "SELECT * FROM aplicacion WHERE categoria = ? AND precio BETWEEN ? AND ?";
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, categoria);
+            ps.setDouble(2, precioMin);
+            ps.setDouble(3, precioMax);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) lista.add(mapear(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    public List<Aplicacion> filtrarPorSOYConexion(String sistemaOperativo, boolean requiereConexionRed) {
+        List<Aplicacion> lista = new ArrayList<>();
+        String sql = "SELECT * FROM aplicacion WHERE sistema_operativo = ? AND requiere_conexion_red = ?";
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, sistemaOperativo);
+            ps.setBoolean(2, requiereConexionRed);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) lista.add(mapear(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
     private void setParametros(PreparedStatement ps, Aplicacion a) throws SQLException {
         ps.setString(1, a.getNombre());
         ps.setString(2, a.getProveedor());

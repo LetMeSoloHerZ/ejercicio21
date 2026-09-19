@@ -10,14 +10,10 @@ public class UsuarioDAO {
     public List<Usuario> listar() {
         List<Usuario> lista = new ArrayList<>();
         String sql = "SELECT * FROM usuario";
-
         try (Connection con = ConexionBD.obtenerConexion();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                lista.add(mapear(rs));
-            }
+            while (rs.next()) lista.add(mapear(rs));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -29,6 +25,21 @@ public class UsuarioDAO {
         try (Connection con = ConexionBD.obtenerConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapear(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Usuario autenticar(String correo, String claveHash) {
+        String sql = "SELECT * FROM usuario WHERE correo = ? AND clave = ?";
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, correo);
+            ps.setString(2, claveHash);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return mapear(rs);
             }
@@ -79,6 +90,36 @@ public class UsuarioDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+        public List<Usuario> listarPorRol(String rol) {
+        List<Usuario> lista = new ArrayList<>();
+        String sql = "SELECT * FROM usuario WHERE rol = ?";
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, rol);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) lista.add(mapear(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    public List<Usuario> buscarPorNombre(String nombreParcial) {
+        List<Usuario> lista = new ArrayList<>();
+        String sql = "SELECT * FROM usuario WHERE nombre LIKE ?";
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, "%" + nombreParcial + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) lista.add(mapear(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
     }
 
     private Usuario mapear(ResultSet rs) throws SQLException {

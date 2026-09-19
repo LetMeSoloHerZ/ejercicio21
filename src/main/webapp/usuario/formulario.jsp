@@ -1,4 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
 <html>
 <head><title>Formulario de Usuario</title></head>
 <body>
@@ -10,7 +12,11 @@
     <input type="text" name="nombre" value="${usuario.nombre}" required /><br><br>
 
     <label>Clave:</label><br>
-    <input type="text" name="clave" value="${usuario.clave}" required /><br><br>
+    <input type="text" name="clave" />
+    <c:if test="${usuario != null}">
+        <small>(deja en blanco para no cambiar la clave actual)</small>
+    </c:if>
+    <br><br>
 
     <label>Correo:</label><br>
     <input type="email" name="correo" value="${usuario.correo}" required /><br><br>
