@@ -30,9 +30,9 @@ CREATE TABLE aplicacion (
 );
 
 INSERT INTO usuario (nombre, clave, correo, rol) VALUES
-('Admin Principal', 'admin123', 'admin@correo.com', 'administrador'),
-('Juan Perez', 'juan123', 'juan@correo.com', 'usuario'),
-('Maria Lopez', 'maria123', 'maria@correo.com', 'usuario');
+('Admin Principal', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'admin@correo.com', 'administrador'),
+('Juan Perez', 'f6ccb3e8d609012238c0b39e60b2c9632b3cdede91e035dad1de43469768f4cc', 'juan@correo.com', 'usuario'),
+('Maria Lopez', '626e3c805e77eeb472c42c6be607be2af7ac5c08fd7050f278e0330fe81abf57', 'maria@correo.com', 'usuario');
 
 INSERT INTO aplicacion
 (nombre, proveedor, categoria, lenguaje_principal, lenguaje_secundario, usa_bd, requiere_conexion_red, num_bits, sistema_operativo, requisitos_hardware, licencia, precio, descripcion, web, correo, tamano_instalador) VALUES
