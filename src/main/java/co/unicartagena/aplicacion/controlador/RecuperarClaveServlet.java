@@ -5,7 +5,6 @@ import co.unicartagena.aplicacion.modelo.Usuario;
 import co.unicartagena.aplicacion.util.CorreoUtil;
 import co.unicartagena.aplicacion.util.PasswordUtil;
 
-import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -56,7 +55,7 @@ public class RecuperarClaveServlet extends HttpServlet {
                 "Úsala para iniciar sesión. Te recomendamos cambiarla luego si tu aplicación lo permite."
             );
             request.setAttribute("mensaje", "Se envió una clave temporal a tu correo.");
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "La clave se actualizó, pero no se pudo enviar el correo.");
         }
