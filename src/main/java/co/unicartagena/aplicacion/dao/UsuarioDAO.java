@@ -92,7 +92,7 @@ public class UsuarioDAO {
         }
     }
 
-        public List<Usuario> listarPorRol(String rol) {
+    public List<Usuario> listarPorRol(String rol) {
         List<Usuario> lista = new ArrayList<>();
         String sql = "SELECT * FROM usuario WHERE rol = ?";
         try (Connection con = ConexionBD.obtenerConexion();
@@ -120,6 +120,33 @@ public class UsuarioDAO {
             e.printStackTrace();
         }
         return lista;
+    }
+
+    public Usuario buscarPorCorreo(String correo) {
+        String sql = "SELECT * FROM usuario WHERE correo = ?";
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, correo);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapear(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean actualizarClavePorCorreo(String correo, String nuevaClaveHash) {
+        String sql = "UPDATE usuario SET clave = ? WHERE correo = ?";
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, nuevaClaveHash);
+            ps.setString(2, correo);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     private Usuario mapear(ResultSet rs) throws SQLException {
